@@ -2,7 +2,7 @@
   "name": "com.grimbar-interactive.unity-state",
   "displayName": "Unity State",
   "version": "1.0.0",
-  "unity": "2020.3.25f1",
+  "unity": "2020.3",
   "description": "Simple state machines for Unity.",
   "keywords": [ "state", "game", "games", "unity" ],
   "category": "unity",
