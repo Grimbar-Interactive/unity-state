@@ -1,0 +1,16 @@
+{
+    "name": "GrimbarInteractive.UnityToolkit.State",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0ff51d9640894c441a1d1e5988309ba4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
