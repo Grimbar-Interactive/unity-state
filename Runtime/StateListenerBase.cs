@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace GI.UnityToolkit.State
 {
-    public class StateListener : MonoBehaviour, IStateListener
+    public abstract class StateListenerBase<TState> : MonoBehaviour, IStateListener<TState> where TState: StateBase
     {
-        [SerializeField] private StateManager manager = null;
-        [SerializeField] private List<State> activeStates = null;
-        [SerializeField] private StateEvent response = null;
+        [Title("Settings")]
+        [SerializeField] private StateManagerBase<TState> manager = null;
+        [SerializeField, Space(4)] private List<TState> activeStates = null;
+        
+        [Title("Events")]
         [SerializeField] private UnityEvent activeResponse = null;
         [SerializeField] private UnityEvent inactiveResponse = null;
 
@@ -24,10 +27,8 @@ namespace GI.UnityToolkit.State
             manager.UnregisterListener(this);
         }
 
-        public void OnStateChanged(State state)
+        public void OnStateChanged(TState state)
         {
-            response.Invoke(state);
-
             if (activeStates.Contains(state))
             {
                 activeResponse?.Invoke();
@@ -37,8 +38,5 @@ namespace GI.UnityToolkit.State
                 inactiveResponse?.Invoke();
             }
         }
-
-        [System.Serializable]
-        public class StateEvent : UnityEvent<State> { }
     }
 }

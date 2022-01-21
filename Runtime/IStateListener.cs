@@ -1,7 +1,7 @@
 ﻿namespace GI.UnityToolkit.State
 {
-    public interface IStateListener
+    public interface IStateListener<in TState> where TState : StateBase
     {
-        void OnStateChanged(State state);
+        void OnStateChanged(TState state);
     }
 }
