@@ -5,10 +5,12 @@ using UnityEngine.Events;
 
 namespace GI.UnityToolkit.State
 {
-    public abstract class StateListenerBase<TState> : MonoBehaviour, IStateListener<TState> where TState: StateBase
+    public abstract class StateListenerBase<TState, TManager> : MonoBehaviour, IStateListener<TState>
+        where TState: StateBase
+        where TManager: StateManagerBase<TState>
     {
         [Title("Settings")]
-        [SerializeField] private StateManagerBase<TState> manager = null;
+        [SerializeField] private TManager manager = null;
         [SerializeField, Space(4)] private List<TState> activeStates = null;
         
         [Title("Events")]
