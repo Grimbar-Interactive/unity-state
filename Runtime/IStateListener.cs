@@ -2,6 +2,6 @@
 {
     public interface IStateListener<in TState> where TState : StateBase
     {
-        void OnStateChanged(TState state);
+        void OnStateChanged(TState previousState, TState newState);
     }
 }

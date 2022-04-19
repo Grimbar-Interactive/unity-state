@@ -16,6 +16,8 @@ namespace GI.UnityToolkit.State
         [Title("Events")]
         [SerializeField] private UnityEvent activeResponse = null;
         [SerializeField] private UnityEvent inactiveResponse = null;
+        [SerializeField] private UnityEvent enteringResponse = null;
+        [SerializeField] private UnityEvent leavingResponse = null;
 
         private void OnEnable()
         {
@@ -29,9 +31,22 @@ namespace GI.UnityToolkit.State
             manager.UnregisterListener(this);
         }
 
-        public void OnStateChanged(TState state)
+        public void OnStateChanged(TState previousState, TState newState)
         {
-            if (activeStates.Contains(state))
+            var wasActivePreviously = activeStates.Contains(previousState);
+            var isActiveState = activeStates.Contains(newState);
+
+            switch (wasActivePreviously)
+            {
+                case false when isActiveState:
+                    enteringResponse?.Invoke();
+                    break;
+                case true when !isActiveState:
+                    leavingResponse?.Invoke();
+                    break;
+            }
+            
+            if (isActiveState)
             {
                 activeResponse?.Invoke();
             }

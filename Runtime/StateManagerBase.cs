@@ -16,28 +16,28 @@ namespace GI.UnityToolkit.State
         public List<TState> States => states;
         public TState DefaultState => defaultState;
         
-        [ValueDropdown("states"), ShowInInspector, LabelText("Current State"), DisableInEditorMode, OnValueChanged("OnStateChanged")]
+        [ShowInInspector, DisplayAsString] public TState PreviousState { get; protected set; }
+        
+        [ValueDropdown("states"), ShowInInspector, LabelText("Current State"), DisableInEditorMode, OnValueChanged("OnCurrentStateChanged")]
         public TState CurrentState { get; protected set; }
 
         private readonly List<IStateListener<TState>> _listeners = new List<IStateListener<TState>>();
 
+        private TState _lastSentState = null;
+        
         protected override void OnBegin()
         {
             base.OnBegin();
-            CurrentState = DefaultState;
+            CurrentState = PreviousState = _lastSentState = DefaultState;
             OnStateChanged();
         }
 
         public void SetState(TState state)
         {
-            if (!states.Contains(state) || state == CurrentState)
-            {
-                Debug.Log($"returning: {state}, {CurrentState}");
-                return;
-            }
-
+            if (!states.Contains(state) || state == CurrentState) return;
+            PreviousState = CurrentState;
             CurrentState = state;
-            
+            _lastSentState = CurrentState;
             OnStateChanged();
         }
 
@@ -61,7 +61,7 @@ namespace GI.UnityToolkit.State
         {
             for (var i = _listeners.Count - 1; i >= 0; i--)
             {
-                _listeners[i].OnStateChanged(CurrentState);
+                _listeners[i].OnStateChanged(PreviousState, CurrentState);
             }
         }
 
@@ -69,12 +69,14 @@ namespace GI.UnityToolkit.State
         private void OnDefaultStateChanged()
         {
             if (Application.isPlaying) return;
-            CurrentState = defaultState;
+            CurrentState = PreviousState = _lastSentState = defaultState;
         }
 
         [UsedImplicitly]
         private void OnCurrentStateChanged()
         {
+            PreviousState = _lastSentState;
+            _lastSentState = CurrentState;
             OnStateChanged();
         }
         
@@ -82,7 +84,7 @@ namespace GI.UnityToolkit.State
         {
             if (states.Count == 0)
             {
-                defaultState = CurrentState = null;
+                defaultState = CurrentState = PreviousState = _lastSentState = null;
                 return;
             }
             
@@ -92,7 +94,7 @@ namespace GI.UnityToolkit.State
                 defaultState = states[0];
             }
             
-            if (!Application.isPlaying) CurrentState = defaultState;
+            if (!Application.isPlaying) CurrentState = PreviousState = _lastSentState = defaultState;
         }
     }
 }
