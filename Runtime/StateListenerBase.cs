@@ -1,7 +1,10 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace GI.UnityToolkit.State
 {
@@ -9,11 +12,19 @@ namespace GI.UnityToolkit.State
         where TState: StateBase
         where TManager: StateManagerBase<TState>
     {
+#if ODIN_INSPECTOR
         [Title("Settings")]
+#else
+        [Header("Settings")]
+#endif
         [SerializeField] private TManager manager = null;
         [SerializeField, Space(4)] private List<TState> activeStates = null;
         
+#if ODIN_INSPECTOR
         [Title("Events")]
+#else
+        [Header("Events")]
+#endif
         [SerializeField] private UnityEvent activeResponse = null;
         [SerializeField] private UnityEvent inactiveResponse = null;
         [SerializeField] private UnityEvent enteringResponse = null;

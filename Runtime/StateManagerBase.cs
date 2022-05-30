@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using GI.UnityToolkit.Variables;
 using JetBrains.Annotations;
-using Sirenix.OdinInspector;
 using UnityEngine;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace GI.UnityToolkit.State
 {
@@ -10,15 +13,22 @@ namespace GI.UnityToolkit.State
     {
         [SerializeField, Space(10)] private List<TState> states = new List<TState>();
         
+#if ODIN_INSPECTOR
         [ValueDropdown("states"), OnValueChanged("OnDefaultStateChanged")]
+#endif
         [SerializeField] private TState defaultState = null;
         
         public List<TState> States => states;
         public TState DefaultState => defaultState;
         
-        [ShowInInspector, DisplayAsString] public TState PreviousState { get; protected set; }
+#if ODIN_INSPECTOR
+        [ShowInInspector, DisplayAsString]
+#endif
+        public TState PreviousState { get; protected set; }
         
+#if ODIN_INSPECTOR
         [ValueDropdown("states"), ShowInInspector, LabelText("Current State"), DisableInEditorMode, OnValueChanged("OnCurrentStateChanged")]
+#endif
         public TState CurrentState { get; protected set; }
 
         private readonly List<IStateListener<TState>> _listeners = new List<IStateListener<TState>>();
