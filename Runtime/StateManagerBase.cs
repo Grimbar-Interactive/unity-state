@@ -5,6 +5,8 @@ using UnityEngine;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#else
+using NaughtyAttributes;
 #endif
 
 namespace GI.UnityToolkit.State
@@ -15,6 +17,8 @@ namespace GI.UnityToolkit.State
         
 #if ODIN_INSPECTOR
         [ValueDropdown("states"), OnValueChanged("OnDefaultStateChanged")]
+#else
+        [Dropdown("states"), OnValueChanged("OnDefaultStateChanged")]
 #endif
         [SerializeField] private TState defaultState = null;
         
@@ -22,12 +26,22 @@ namespace GI.UnityToolkit.State
         public TState DefaultState => defaultState;
         
 #if ODIN_INSPECTOR
-        [ShowInInspector, DisplayAsString]
+        [ShowInInspector, DisplayAsString, Title("Runtime State")]
+#else
+        [UsedImplicitly]
+        private bool DisableEditorField => true;
+        
+        [field: SerializeField, Dropdown("states"), DisableIf("DisableEditorField"), Header("Runtime State")]
 #endif
         public TState PreviousState { get; protected set; }
         
 #if ODIN_INSPECTOR
         [ValueDropdown("states"), ShowInInspector, LabelText("Current State"), DisableInEditorMode, OnValueChanged("OnCurrentStateChanged")]
+#else
+        [UsedImplicitly]
+        private bool IsEditor => Application.isPlaying == false;
+        
+        [field: SerializeField, Dropdown("states"), Label("Current State"), DisableIf("IsEditor"), OnValueChanged("OnCurrentStateChanged")]
 #endif
         public TState CurrentState { get; protected set; }
 
