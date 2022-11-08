@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -18,17 +19,29 @@ namespace GI.UnityToolkit.State
         [Header("Settings")]
 #endif
         [SerializeField] private TManager manager = null;
-        [SerializeField, Space(4)] private List<TState> activeStates = null;
         
 #if ODIN_INSPECTOR
-        [Title("Events")]
+        private bool StateManagerIsNull => manager == null;
+        private List<TState> StateOptions => manager != null ? manager.States : new List<TState>();
+
+        [FormerlySerializedAs("activeStates")] [SerializeField, HideIf(nameof(StateManagerIsNull)), ValueDropdown(nameof(StateOptions)), Space(4)]
+#else
+        [FormerlySerializedAs("activeStates")] [SerializeField, Space(4)]
+#endif
+        private List<TState> statesListenedFor = null;
+        
+#if ODIN_INSPECTOR
+        [Title("Events"), HideIfGroup("Events", Condition = nameof(StateManagerIsNull))]
 #else
         [Header("Events")]
 #endif
-        [SerializeField] private UnityEvent activeResponse = null;
-        [SerializeField] private UnityEvent inactiveResponse = null;
-        [SerializeField] private UnityEvent enteringResponse = null;
-        [SerializeField] private UnityEvent leavingResponse = null;
+        [SerializeField, Tooltip("Triggers when a listened state is entered from a non-listened state.")]
+        private UnityEvent enteringResponse = null;
+#if ODIN_INSPECTOR
+        [HideIfGroup("Events", Condition = nameof(StateManagerIsNull))]
+#endif
+        [SerializeField, Tooltip("Triggers when a non-listened state is entered from a listened state.")]
+        private UnityEvent leavingResponse = null;
 
         private void OnEnable()
         {
@@ -44,8 +57,8 @@ namespace GI.UnityToolkit.State
 
         public void OnStateChanged(TState previousState, TState newState)
         {
-            var wasActivePreviously = activeStates.Contains(previousState);
-            var isActiveState = activeStates.Contains(newState);
+            var wasActivePreviously = statesListenedFor.Contains(previousState);
+            var isActiveState = statesListenedFor.Contains(newState);
 
             switch (wasActivePreviously)
             {
@@ -55,15 +68,6 @@ namespace GI.UnityToolkit.State
                 case true when !isActiveState:
                     leavingResponse?.Invoke();
                     break;
-            }
-            
-            if (isActiveState)
-            {
-                activeResponse?.Invoke();
-            }
-            else
-            {
-                inactiveResponse?.Invoke();
             }
         }
     }

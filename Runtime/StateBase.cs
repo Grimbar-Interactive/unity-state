@@ -2,8 +2,9 @@ using GI.UnityToolkit.Variables;
 
 namespace GI.UnityToolkit.State
 {
+    [System.Serializable]
     public abstract class StateBase : DataObject
     {
-        public string Name => name;
+        public override string ToString() => name;
     }
 }

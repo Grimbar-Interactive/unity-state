@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GI.UnityToolkit.Variables;
 using JetBrains.Annotations;
@@ -20,9 +21,12 @@ namespace GI.UnityToolkit.State
 #else
         [Dropdown("states"), OnValueChanged("OnDefaultStateChanged")]
 #endif
-        [SerializeField] private TState defaultState = null;
+        [SerializeField, Space(10)] private TState defaultState = null;
         
+        [UsedImplicitly]
         public List<TState> States => states;
+        
+        [UsedImplicitly]
         public TState DefaultState => defaultState;
         
 #if ODIN_INSPECTOR
@@ -44,18 +48,31 @@ namespace GI.UnityToolkit.State
         [field: SerializeField, Dropdown("states"), Label("Current State"), DisableIf("IsEditor"), OnValueChanged("OnCurrentStateChanged")]
 #endif
         public TState CurrentState { get; protected set; }
-
-        private readonly List<IStateListener<TState>> _listeners = new List<IStateListener<TState>>();
-
+        
+#if ODIN_INSPECTOR
+        [NonSerialized, ShowInInspector, ListDrawerSettings(IsReadOnly = true), Title("Runtime Listeners"), PropertyOrder(1)]
+#else
+        [NonSerialized]
+#endif
+        private readonly List<IStateListener<TState>> _listeners = new();
+        
         private TState _lastSentState = null;
         
         protected override void OnBegin()
         {
             base.OnBegin();
-            CurrentState = PreviousState = _lastSentState = DefaultState;
+            PreviousState = null;
+            CurrentState = _lastSentState = DefaultState;
             OnStateChanged();
         }
 
+        protected override void OnEnd()
+        {
+            base.OnEnd();
+            _listeners.Clear();
+        }
+
+        [UsedImplicitly]
         public void SetState(TState state)
         {
             if (!states.Contains(state) || state == CurrentState) return;
@@ -65,6 +82,13 @@ namespace GI.UnityToolkit.State
             OnStateChanged();
         }
 
+        [UsedImplicitly]
+        public void SetToPreviousState()
+        {
+            SetState(PreviousState);
+        }
+
+        [UsedImplicitly]
         public void Default()
         {
             SetState(DefaultState);
