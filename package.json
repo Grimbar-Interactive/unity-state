@@ -1,7 +1,7 @@
 {
   "name": "com.grimbar-interactive.unity-state",
   "displayName": "Unity State",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "unity": "2021.3",
   "description": "Simple state machines for Unity.",
   "keywords": [ "state", "game", "games", "unity" ],
@@ -11,6 +11,6 @@
   "author": {
 	  "name": "Grimbar Interactive",
 	  "email": "jacob@grimbar.dev",
-	  "url": "http://www.grimbar.dev"
+	  "url": "https://grimbarinteractive.com/"
   }
 }

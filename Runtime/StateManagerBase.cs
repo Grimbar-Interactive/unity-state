@@ -14,12 +14,12 @@ namespace GI.UnityToolkit.State
 {
     public abstract class StateManagerBase<TState> : DataObject where TState : StateBase
     {
-        [SerializeField, Space(10)] private List<TState> states = new List<TState>();
+        [SerializeField, Space(10)] private List<TState> states = new();
         
 #if ODIN_INSPECTOR
-        [ValueDropdown("states"), OnValueChanged("OnDefaultStateChanged")]
+        [ValueDropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
 #else
-        [Dropdown("states"), OnValueChanged("OnDefaultStateChanged")]
+        [Dropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
 #endif
         [SerializeField, Space(10)] private TState defaultState = null;
         
@@ -30,16 +30,6 @@ namespace GI.UnityToolkit.State
         public TState DefaultState => defaultState;
         
 #if ODIN_INSPECTOR
-        [ShowInInspector, DisplayAsString, Title("Runtime State")]
-#else
-        [UsedImplicitly]
-        private bool DisableEditorField => true;
-        
-        [field: SerializeField, Dropdown("states"), DisableIf("DisableEditorField"), Header("Runtime State")]
-#endif
-        public TState PreviousState { get; protected set; }
-        
-#if ODIN_INSPECTOR
         [ValueDropdown("states"), ShowInInspector, LabelText("Current State"), DisableInEditorMode, OnValueChanged("OnCurrentStateChanged")]
 #else
         [UsedImplicitly]
@@ -48,6 +38,16 @@ namespace GI.UnityToolkit.State
         [field: SerializeField, Dropdown("states"), Label("Current State"), DisableIf("IsEditor"), OnValueChanged("OnCurrentStateChanged")]
 #endif
         public TState CurrentState { get; protected set; }
+        
+#if ODIN_INSPECTOR
+        [ShowInInspector, DisplayAsString, Title("Runtime State")]
+#else
+        [UsedImplicitly]
+        private bool DisableEditorField => true;
+        
+        [field: SerializeField, Dropdown("states"), DisableIf(nameof(DisableEditorField)), Header("Runtime State")]
+#endif
+        public TState PreviousState { get; protected set; }
         
 #if ODIN_INSPECTOR
         [NonSerialized, ShowInInspector, ListDrawerSettings(IsReadOnly = true), Title("Runtime Listeners"), PropertyOrder(1)]

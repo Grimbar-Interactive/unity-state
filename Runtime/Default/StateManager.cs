@@ -2,6 +2,6 @@
 
 namespace GI.UnityToolkit.State
 {
-    [CreateAssetMenu(menuName = "State/Manager")]
+    [CreateAssetMenu(menuName = "State/State Manager")]
     public class StateManager : StateManagerBase<State> {}
 }
