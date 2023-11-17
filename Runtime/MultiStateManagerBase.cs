@@ -95,8 +95,8 @@ namespace GI.UnityToolkit.State
 
         public void SetAllActive() => CurrentActiveStates.SetAllActive();
         public void SetAllInactive() => CurrentActiveStates.SetAllInactive();
-        public void AreAllActive() => CurrentActiveStates.AreAllActive();
-        public void IsActive(TState state) => CurrentActiveStates.IsActive(state);
+        public bool AreAllActive() => CurrentActiveStates.AreAllActive();
+        public bool IsActive(TState state) => CurrentActiveStates.IsActive(state);
 
         private void ApplyChange(Func<IEnumerable<TState>, bool> action, IEnumerable<TState> statesToApply)
         {
