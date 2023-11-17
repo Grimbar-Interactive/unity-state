@@ -93,6 +93,11 @@ namespace GI.UnityToolkit.State
         [UsedImplicitly]
         public void Default() => ApplyChange(CurrentActiveStates.Set, DefaultActiveStates.ActiveStates);
 
+        public void SetAllActive() => CurrentActiveStates.SetAllActive();
+        public void SetAllInactive() => CurrentActiveStates.SetAllInactive();
+        public void AreAllActive() => CurrentActiveStates.AreAllActive();
+        public void IsActive(TState state) => CurrentActiveStates.IsActive(state);
+
         private void ApplyChange(Func<IEnumerable<TState>, bool> action, IEnumerable<TState> statesToApply)
         {
             var currentStates = CurrentActiveStates.ActiveStates;
