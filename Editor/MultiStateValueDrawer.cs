@@ -33,7 +33,7 @@ namespace GI.UnityToolkit.State.Editor
             }
             else
             {
-                dropdownString = string.Join(", ", multiStateValue.ActiveStates.Select(s => s.name));
+                dropdownString = multiStateValue.ToString();
             }
 
             if (EditorGUI.DropdownButton(position, new GUIContent(dropdownString), FocusType.Keyboard))

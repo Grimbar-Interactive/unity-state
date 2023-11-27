@@ -88,19 +88,31 @@ namespace GI.UnityToolkit.State
             new[] { state });
 
         [UsedImplicitly]
+        public void ToggleAllActive() => ApplyChange(CurrentActiveStates.Set,
+            CurrentActiveStates.AreAllActive() ? new List<TState>() : States.ToList());
+
+        [UsedImplicitly]
         public void SetToPreviousActiveStates() => ApplyChange(CurrentActiveStates.Set, PreviousActiveStates.ActiveStates);
 
         [UsedImplicitly]
         public void Default() => ApplyChange(CurrentActiveStates.Set, DefaultActiveStates.ActiveStates);
 
-        public void SetAllActive() => CurrentActiveStates.SetAllActive();
-        public void SetAllInactive() => CurrentActiveStates.SetAllInactive();
+        public void SetAllActive()
+        {
+            CurrentActiveStates.SetAllActive();
+        }
+
+        public void SetAllInactive()
+        {
+            CurrentActiveStates.SetAllInactive();
+        }
+
         public bool AreAllActive() => CurrentActiveStates.AreAllActive();
         public bool IsActive(TState state) => CurrentActiveStates.IsActive(state);
 
         private void ApplyChange(Func<IEnumerable<TState>, bool> action, IEnumerable<TState> statesToApply)
         {
-            var currentStates = CurrentActiveStates.ActiveStates;
+            var currentStates = new List<TState>(CurrentActiveStates.ActiveStates);
 
             var changed = action?.Invoke(statesToApply);
             if (changed == false) return;

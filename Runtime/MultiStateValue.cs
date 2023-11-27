@@ -222,4 +222,9 @@ public class MultiStateValue<TState> where TState : StateBase
     /// Returns all states available to this MultiStateValue.
     /// </summary>
     public List<TState> AvailableStates => _availableStates;
+
+    public override string ToString()
+    {
+        return string.Join(", ", ActiveStates.Select(s => s.name));
+    }
 }
