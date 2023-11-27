@@ -58,6 +58,15 @@ namespace GI.UnityToolkit.State
         {
             if (!manager) return;
             manager.RegisterListener(this);
+
+            if (IsActiveBasedOnConditions(manager.CurrentActiveStates))
+            {
+                activeResponse?.Invoke();
+            }
+            else
+            {
+                inactiveResponse?.Invoke();
+            }
         }
 
         private void OnDisable()
@@ -80,17 +89,17 @@ namespace GI.UnityToolkit.State
                     inactiveResponse?.Invoke();
                     break;
             }
-
-            bool IsActiveBasedOnConditions(MultiStateValue<TState> value)
+        }
+        
+        private bool IsActiveBasedOnConditions(MultiStateValue<TState> value)
+        {
+            return activeWhen switch
             {
-                return activeWhen switch
-                {
-                    StateComparison.AnyAreActive => statesListenedFor.Any(value.IsActive),
-                    StateComparison.AllAreActive => statesListenedFor.All(value.IsActive),
-                    StateComparison.NoneAreActive => !statesListenedFor.Any(value.IsActive),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
+                StateComparison.AnyAreActive => statesListenedFor.Any(value.IsActive),
+                StateComparison.AllAreActive => statesListenedFor.All(value.IsActive),
+                StateComparison.NoneAreActive => !statesListenedFor.Any(value.IsActive),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }
