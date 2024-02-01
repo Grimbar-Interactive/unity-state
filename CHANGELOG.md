@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ==
+## [1.3.5] - 2024-02-01
+### Added
+- Added support for Unity 2019.4.X versions.
+
 ## [1.3.4] - 2023-11-27
 ### Fixed
 - Fixed an issue with previous value in MultiStateManagerBase.

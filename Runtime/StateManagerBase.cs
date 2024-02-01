@@ -14,7 +14,7 @@ namespace GI.UnityToolkit.State
 {
     public abstract class StateManagerBase<TState> : DataObject where TState : StateBase
     {
-        [SerializeField, Space(10)] private List<TState> states = new();
+        [SerializeField, Space(10)] private List<TState> states = new List<TState>();
         
 #if ODIN_INSPECTOR
         [ValueDropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
@@ -54,7 +54,7 @@ namespace GI.UnityToolkit.State
 #else
         [NonSerialized]
 #endif
-        private readonly List<IStateListener<TState>> _listeners = new();
+        private readonly List<IStateListener<TState>> _listeners = new List<IStateListener<TState>>();
         
         private TState _lastSentState = null;
         

@@ -1,3 +1,4 @@
+#if !UNITY_2019
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,13 +94,18 @@ namespace GI.UnityToolkit.State
         
         private bool IsActiveBasedOnConditions(MultiStateValue<TState> value)
         {
-            return activeWhen switch
+            switch (activeWhen)
             {
-                StateComparison.AnyAreActive => statesListenedFor.Any(value.IsActive),
-                StateComparison.AllAreActive => statesListenedFor.All(value.IsActive),
-                StateComparison.NoneAreActive => !statesListenedFor.Any(value.IsActive),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+                case StateComparison.AnyAreActive:
+                    return statesListenedFor.Any(value.IsActive);
+                case StateComparison.AllAreActive:
+                    return statesListenedFor.All(value.IsActive);
+                case StateComparison.NoneAreActive:
+                    return !statesListenedFor.Any(value.IsActive);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
+#endif

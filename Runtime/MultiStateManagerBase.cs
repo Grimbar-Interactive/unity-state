@@ -1,3 +1,4 @@
+#if !UNITY_2019
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,7 @@ namespace GI.UnityToolkit.State
 #else
         [NonSerialized]
 #endif
-        private readonly List<IMultiStateListener<TState>> _listeners = new();
+        private readonly List<IMultiStateListener<TState>> _listeners = new List<IMultiStateListener<TState>>();
 
         private MultiStateValue<TState> _lastSentStates;
 
@@ -83,9 +84,19 @@ namespace GI.UnityToolkit.State
         public void UnsetStateAsActive(TState state) => ApplyChange(CurrentActiveStates.SetInactive, new[] { state });
         
         [UsedImplicitly]
-        public void ToggleStateActive(TState state) => ApplyChange(
-            CurrentActiveStates.IsActive(state) ? CurrentActiveStates.SetInactive : CurrentActiveStates.SetActive,
-            new[] { state });
+        public void ToggleStateActive(TState state)
+        {
+            Func<IEnumerable<TState>, bool> method;
+            if (CurrentActiveStates.IsActive(state))
+            {
+                method = CurrentActiveStates.SetInactive;
+            }
+            else
+            {
+                method = CurrentActiveStates.SetActive;
+            }
+            ApplyChange(method, new[] { state });
+        }
 
         [UsedImplicitly]
         public void ToggleAllActive() => ApplyChange(CurrentActiveStates.Set,
@@ -169,10 +180,10 @@ namespace GI.UnityToolkit.State
 
         private void OnValidate()
         {
-            DefaultActiveStates ??= new MultiStateValue<TState>(States);
-            CurrentActiveStates ??= new MultiStateValue<TState>(States, DefaultActiveStates);
-            PreviousActiveStates ??= new MultiStateValue<TState>(States, DefaultActiveStates);
-            _lastSentStates ??= new MultiStateValue<TState>(States, DefaultActiveStates);
+            if (DefaultActiveStates == null) DefaultActiveStates = new MultiStateValue<TState>(States);
+            if (CurrentActiveStates == null) CurrentActiveStates = new MultiStateValue<TState>(States, DefaultActiveStates);
+            if (PreviousActiveStates == null) PreviousActiveStates = new MultiStateValue<TState>(States, DefaultActiveStates);
+            if (_lastSentStates == null) _lastSentStates = new MultiStateValue<TState>(States, DefaultActiveStates);
 
             if (Application.isPlaying) return;
             ResetStateListsToMatchDefault();
@@ -180,10 +191,11 @@ namespace GI.UnityToolkit.State
 
         private void ResetStateListsToMatchDefault()
         {
-            DefaultActiveStates ??= new MultiStateValue<TState>(States);
+            if (DefaultActiveStates == null) DefaultActiveStates = new MultiStateValue<TState>(States);
             CurrentActiveStates = new MultiStateValue<TState>(States, DefaultActiveStates);
             PreviousActiveStates = new MultiStateValue<TState>(States, DefaultActiveStates);
             _lastSentStates = new MultiStateValue<TState>(States, DefaultActiveStates);
         }
     }
 }
+#endif

@@ -1,9 +1,9 @@
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace GI.UnityToolkit.State.Editor
 {
+#if !UNITY_2019
     [CustomPropertyDrawer(typeof(MultiStateValue<State>))]
     public class MultiStateValueDrawer : MultiStateValueDrawer<State> {}
 
@@ -11,8 +11,11 @@ namespace GI.UnityToolkit.State.Editor
     /// Generic property drawer for MultiStateValue properties.
     /// Note that you'll need to add your own drawer inheriting from this if you implement a custom, inherited StateBase type.
     /// </summary>
-    /// <typeparam name="TState"></typeparam>
     public class MultiStateValueDrawer<TState> : PropertyDrawer where TState : StateBase
+#else
+    [CustomPropertyDrawer(typeof(MultiStateValue))]
+    public class MultiStateValueDrawer : PropertyDrawer
+#endif
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -20,7 +23,11 @@ namespace GI.UnityToolkit.State.Editor
 
             position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
+#if !UNITY_2019
             var multiStateValue = (MultiStateValue<TState>)PropertyDrawerUtilities.GetTargetObjectOfProperty(property);
+#else
+            var multiStateValue = (MultiStateValue)PropertyDrawerUtilities.GetTargetObjectOfProperty(property);
+#endif
 
             string dropdownString;
             if (multiStateValue.ActiveStates.Count == 0)
