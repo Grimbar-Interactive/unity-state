@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ==
+## [1.3.7] - 2024-02-14
+### Added
+- Added AddListenedState and RemoveListenedState to MultiStateListenerBase for added flexibility.
+
 ## [1.3.6] - 2024-02-13
 ### Added
 - Added scripting defines.

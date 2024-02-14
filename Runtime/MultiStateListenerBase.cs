@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -105,6 +106,22 @@ namespace GI.UnityToolkit.State
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+        
+        [UsedImplicitly]
+        public void AddListenedState(TState state)
+        {
+            if (statesListenedFor.Contains(state) || !manager.States.Contains(state)) return;
+            statesListenedFor.Add(state);
+            OnStateChanged(manager.PreviousActiveStates, manager.CurrentActiveStates);
+        }
+
+        [UsedImplicitly]
+        public void RemoveListenedState(TState state)
+        {
+            if (!statesListenedFor.Contains(state) || !manager.States.Contains(state)) return;
+            statesListenedFor.Remove(state);
+            OnStateChanged(manager.PreviousActiveStates, manager.CurrentActiveStates);
         }
     }
 }
