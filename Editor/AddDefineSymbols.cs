@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Build;
 
 namespace GI.UnityToolkit.State.Editor
 {
@@ -8,7 +9,7 @@ namespace GI.UnityToolkit.State.Editor
     /// Just add your own define symbols to the Symbols property at the below.
     /// </summary>
     [InitializeOnLoad]
-    public class AddDefineSymbols : UnityEditor.Editor
+    public class AddDefineSymbols : AssetPostprocessor, IActiveBuildTargetChanged
     {
         /// <summary>
         /// Symbols that will be added to the editor
@@ -18,17 +19,32 @@ namespace GI.UnityToolkit.State.Editor
             "GI_STATE"
         };
 
-        /// <summary>
-        /// Add define symbols as soon as Unity gets done compiling.
-        /// </summary>
-        static AddDefineSymbols()
+        public int callbackOrder => 0;
+
+        private void OnPreprocessAsset() => AddDefinesAsNeeded();
+        public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget) => AddDefinesAsNeeded();
+
+        private static void AddDefinesAsNeeded()
         {
-            var definesString =
-                PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            var definesString = PlayerSettings.GetScriptingDefineSymbols(CurrentNamedBuildTarget);
             var allDefines = definesString.Split(';').ToList();
             allDefines.AddRange(Symbols.Except(allDefines));
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
-                string.Join(";", allDefines.ToArray()));
+            PlayerSettings.SetScriptingDefineSymbols(CurrentNamedBuildTarget, allDefines.ToArray());
+        }
+
+        private static NamedBuildTarget CurrentNamedBuildTarget
+        {
+            get
+            {
+#if UNITY_SERVER
+                return NamedBuildTarget.Server;
+#else
+                var buildTarget = EditorUserBuildSettings.activeBuildTarget;
+                var targetGroup = BuildPipeline.GetBuildTargetGroup(buildTarget);
+                var namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(targetGroup);
+                return namedBuildTarget;
+#endif
+            }
         }
     }
 }
