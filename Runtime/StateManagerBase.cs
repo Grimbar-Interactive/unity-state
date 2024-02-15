@@ -19,7 +19,9 @@ namespace GI.UnityToolkit.State
 #if ODIN_INSPECTOR
         [ValueDropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
 #else
-        [Dropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
+        private bool HasStates => states.Count > 0;
+        
+        [ShowIf("HasStates"), Dropdown("states"), OnValueChanged(nameof(OnDefaultStateChanged))]
 #endif
         [SerializeField, Space(10)] private TState defaultState = null;
         
@@ -35,7 +37,7 @@ namespace GI.UnityToolkit.State
         [UsedImplicitly]
         private bool IsEditor => Application.isPlaying == false;
         
-        [field: SerializeField, Dropdown("states"), Label("Current State"), DisableIf("IsEditor"), OnValueChanged("OnCurrentStateChanged")]
+        [field: SerializeField, ShowIf("HasStates"), Dropdown("states"), Label("Current State"), DisableIf("IsEditor"), OnValueChanged("OnCurrentStateChanged")]
 #endif
         public TState CurrentState { get; protected set; }
         
@@ -45,7 +47,7 @@ namespace GI.UnityToolkit.State
         [UsedImplicitly]
         private bool DisableEditorField => true;
         
-        [field: SerializeField, Dropdown("states"), DisableIf(nameof(DisableEditorField)), Header("Runtime State")]
+        [field: SerializeField, ShowIf("HasStates"), Dropdown("states"), DisableIf(nameof(DisableEditorField)), Header("Runtime State")]
 #endif
         public TState PreviousState { get; protected set; }
         
