@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.Compilation;
 using UnityEditor.PackageManager;
 using UnityEngine;
 // ReSharper disable StringLiteralTypo
@@ -11,7 +9,7 @@ namespace GI.UnityToolkit.State.Editor
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     [InitializeOnLoad]
-    public class DependencyResolver : AssetPostprocessor
+    public class DependencyResolver
     {
         private static readonly (string, string)[] Dependencies =
         {
@@ -23,11 +21,21 @@ namespace GI.UnityToolkit.State.Editor
 
         static DependencyResolver()
         {
-            CompilationPipeline.compilationStarted += OnCompilationStarted;
+            //CompilationPipeline.compilationStarted += OnCompilationStarted;
+            Events.registeringPackages += OnRegisteringPackages;
         }
 
-        private static void OnCompilationStarted(object obj) => InstallDependencies();
-        private void OnPreprocessAsset() => InstallDependencies();
+        private static void OnRegisteringPackages(PackageRegistrationEventArgs args)
+        {
+            Debug.Log("OnRegisteringPackages!");
+            InstallDependencies();
+        }
+
+        // private static void OnCompilationStarted(object obj)
+        // {
+        //     
+        // }
+        // private void OnPreprocessAsset() => InstallDependencies();
 
         [InitializeOnLoadMethod]
         public static async void InstallDependencies()
