@@ -22,7 +22,7 @@ namespace GI.UnityToolkit.State.Editor
         static DependencyResolver()
         {
             //CompilationPipeline.compilationStarted += OnCompilationStarted;
-            Events.registeringPackages += OnRegisteringPackages;
+            UnityEditor.PackageManager.Events.registeringPackages += OnRegisteringPackages;
         }
 
         private static void OnRegisteringPackages(PackageRegistrationEventArgs args)
