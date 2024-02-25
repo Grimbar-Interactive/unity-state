@@ -10,7 +10,7 @@ using System.Linq;
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #else
-using NaughtyAttributes;
+using GI.UnityToolkit.Attributes;
 #endif
 #endif
 

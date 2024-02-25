@@ -3,7 +3,7 @@
     "rootNamespace": "",
     "references": [
         "GUID:0ff51d9640894c441a1d1e5988309ba4",
-        "GUID:776d03a35f1b52c4a9aed9f56d7b4229"
+        "GUID:6f06de8afc272b14699bec2824553081"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,7 +12,8 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [
-        "GI_VARIABLES"
+        "GI_VARIABLES",
+        "GI_ATTRIBUTES"
     ],
     "versionDefines": [],
     "noEngineReferences": false

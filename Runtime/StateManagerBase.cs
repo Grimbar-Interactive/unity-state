@@ -7,7 +7,7 @@ using UnityEngine;
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #else
-using NaughtyAttributes;
+using GI.UnityToolkit.Attributes;
 #endif
 
 namespace GI.UnityToolkit.State
