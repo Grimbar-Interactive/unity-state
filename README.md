@@ -1,2 +1,2 @@
 # Unity State
-Simple state machines for Unity.
+A simple state machines for Unity.
