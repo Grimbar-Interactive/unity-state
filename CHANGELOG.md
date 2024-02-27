@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ==
+## [1.3.12] - 2024-02-26
+### Fixed
+- Newer Unity Variables dependency.
+
 ## [1.3.11] - 2024-02-26
 ### Fixed
 - Removed old define constraints.
