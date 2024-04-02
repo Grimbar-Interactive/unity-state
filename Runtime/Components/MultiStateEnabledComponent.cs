@@ -28,7 +28,8 @@ namespace GI.UnityToolkit.State.Components
         {
             AnyAreActive = 0,
             AllAreActive = 1,
-            NoneAreActive = 2
+            NoneAreActive = 2,
+            SomeAreActive = 3
         }
 
 #if ODIN_INSPECTOR
@@ -60,6 +61,7 @@ namespace GI.UnityToolkit.State.Components
                 StateComparison.AnyAreActive => activeStates.Any(newActiveStates.IsActive),
                 StateComparison.AllAreActive => activeStates.All(newActiveStates.IsActive),
                 StateComparison.NoneAreActive => !activeStates.Any(newActiveStates.IsActive),
+                StateComparison.SomeAreActive => activeStates.Any(newActiveStates.IsActive) && !activeStates.All(newActiveStates.IsActive),
                 _ => throw new ArgumentOutOfRangeException()
             };
             
