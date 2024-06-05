@@ -30,7 +30,7 @@ namespace GI.UnityToolkit.State.Editor
 #endif
 
             string dropdownString;
-            if (multiStateValue.ActiveStates.Count == 0)
+            if (multiStateValue.ActiveStates == null || multiStateValue.ActiveStates.Count == 0)
             {
                 dropdownString = "None";
             }
