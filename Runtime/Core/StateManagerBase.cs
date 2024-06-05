@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GI.UnityToolkit.Variables;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
@@ -60,6 +61,23 @@ namespace GI.UnityToolkit.State
         
         private TState _lastSentState = null;
         
+#if ODIN_INSPECTOR
+        [Title("Events"), PropertyOrder(4)]
+#else
+        [Header("Events")]
+#endif
+        [SerializeField] protected UnityEvent OnChangedEvent = default;
+        
+        public void AddOnChangedListener(UnityAction listener)
+        {
+            OnChangedEvent.AddListener(listener);
+        }
+
+        public void RemoveOnChangeListener(UnityAction listener)
+        {
+            OnChangedEvent.RemoveListener(listener);
+        }
+        
         protected override void OnBegin()
         {
             base.OnBegin();
@@ -113,6 +131,7 @@ namespace GI.UnityToolkit.State
             {
                 _listeners[i].OnStateChanged(PreviousState, CurrentState);
             }
+            OnChangedEvent?.Invoke();
         }
 
         [UsedImplicitly]

@@ -10,6 +10,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 #else
 using GI.UnityToolkit.Attributes;
+using UnityEngine.Events;
 #endif
 
 namespace GI.UnityToolkit.State
@@ -59,6 +60,23 @@ namespace GI.UnityToolkit.State
         private readonly List<IMultiStateListener<TState>> _listeners = new List<IMultiStateListener<TState>>();
 
         private MultiStateValue<TState> _lastSentStates;
+        
+#if ODIN_INSPECTOR
+        [Title("Events"), PropertyOrder(4)]
+#else
+        [Header("Events")]
+#endif
+        [SerializeField] protected UnityEvent OnChangedEvent = default;
+        
+        public void AddOnChangedListener(UnityAction listener)
+        {
+            OnChangedEvent.AddListener(listener);
+        }
+
+        public void RemoveOnChangedListener(UnityAction listener)
+        {
+            OnChangedEvent.RemoveListener(listener);
+        }
 
         protected override void OnBegin()
         {
@@ -150,6 +168,7 @@ namespace GI.UnityToolkit.State
             {
                 _listeners[i].OnStateChanged(PreviousActiveStates, CurrentActiveStates);
             }
+            OnChangedEvent?.Invoke();
         }
 
         private void OnAvailableStatesChanged()

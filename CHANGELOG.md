@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ==
+## [1.4.2] - 2024-06-05
+### Added
+- Added On Changed events to StateManager and MultiStateManager.
+
 ## [1.4.1] - 2024-04-02
 ### Added
 - Added Some Are Active to multi state-enabled components.
