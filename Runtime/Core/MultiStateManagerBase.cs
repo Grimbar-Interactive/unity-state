@@ -5,12 +5,12 @@ using System.Linq;
 using GI.UnityToolkit.Variables;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #else
 using GI.UnityToolkit.Attributes;
-using UnityEngine.Events;
 #endif
 
 namespace GI.UnityToolkit.State
