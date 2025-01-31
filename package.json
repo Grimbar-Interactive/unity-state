@@ -1,8 +1,8 @@
 {
     "name": "com.grimbarinteractive.unity-state",
     "displayName": "Unity State",
-    "version": "1.4.4",
-    "unity": "6000.0",
+    "version": "1.4.5",
+    "unity": "2022.3",
     "description": "Simple state machines for Unity.",
     "keywords": [ "state", "game", "games", "unity" ],
     "category": "unity",
