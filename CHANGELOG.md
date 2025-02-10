@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ==
+## [1.4.6] - 2025-02-10
+### Added
+- Added shift state method for convenience.
+
+## [1.4.5] - 2025-02-10
+### Rerelease
+- No changes.
+
 ## [1.4.4] - 2025-01-31
 ### Fixed
 - Missing UnityEvent/UnityAction reference.

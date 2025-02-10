@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GI.UnityToolkit.Utilities;
 using GI.UnityToolkit.Variables;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -112,6 +113,15 @@ namespace GI.UnityToolkit.State
         public void Default()
         {
             SetState(DefaultState);
+        }
+
+        /// <summary>
+        /// Updates the current state to the state forward (+) or backwards (-) on the state list.
+        /// </summary>
+        [UsedImplicitly]
+        public void ShiftState(int amount)
+        {
+            SetState(states[(states.IndexOf(CurrentState) + amount).Mod(states.Count)]);
         }
 
         public void RegisterListener(IStateListener<TState> listener)
